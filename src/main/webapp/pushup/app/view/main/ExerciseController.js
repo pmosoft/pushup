@@ -1,7 +1,7 @@
 Ext.define('pushup.view.main.ExerciseController', {
      extend : 'Ext.app.ViewController'
     ,alias : 'controller.exercise'
-        
+         
     /**********************************************************
      * Main Event
      *********************************************************/    
