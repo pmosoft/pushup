@@ -11,7 +11,7 @@ Ext.define('pushup.view.main.Main', {
    ,items: 
     [
      {
-         title: '운동'
+         title: '운동11111'
         ,iconCls: 'x-fa fa-home'
         ,layout: 'fit'
         ,items: [{
