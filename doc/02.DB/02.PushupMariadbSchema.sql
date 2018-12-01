@@ -35,10 +35,10 @@ CREATE TABLE PUSH.TPUSH00020 (
 ,START_DT      CHAR(8)       NOT NULL COMMENT '시작일자'
 ,END_DT        CHAR(8)           NULL COMMENT '종료일자' -- 종료일자 >= 시작일자, 99991231는 하나만 존재하고, 신규 시작일자생성시 이전 종료일자을 반드시 세팅
 ,EXEC_GOAL_CNT INT               NULL COMMENT '운동목표횟수'
-,REG_DTM      TIMESTAMP          NULL COMMENT '등록일시'
-,REG_USR_ID   VARCHAR(40)        NULL COMMENT '등록자'
-,UPD_DTM      TIMESTAMP          NULL COMMENT '변경일시'
-,UPD_USR_ID   VARCHAR(40)        NULL COMMENT '변경자'
+,REG_DTM       TIMESTAMP         NULL COMMENT '등록일시'
+,REG_USR_ID    VARCHAR(40)       NULL COMMENT '등록자'
+,UPD_DTM       TIMESTAMP         NULL COMMENT '변경일시'
+,UPD_USR_ID    VARCHAR(40)       NULL COMMENT '변경자'
 ,PRIMARY KEY(USR_ID,EXEC_CD,START_DT)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='운동목표이력';
 ;

@@ -1,92 +1,123 @@
 package net.pmosoft.pushup.pushup;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class PushupSrv {
 
+    private static Logger logger = LoggerFactory.getLogger(PushupSrv.class);
+    
 	@Autowired
 	private PushupDao pushupDao;
 
 	@Autowired
 	private PushupValidatorSrv pushupValidatorSrv;
 
-	public Map<String, Object> selectPushupList(Map<String,String> params){
+    public Map<String, Object> insertExeHis(PushupVo inVo){
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            pushupDao.insertExeHis(inVo);
+            result.put("isSuccess", true);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 
-		Map<String, Object> result = new HashMap<String, Object>();
+    public Map<String, Object> insertExeGoalCntHis(PushupVo inVo){
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            pushupDao.insertExeGoalCntHis(inVo);
+            result.put("isSuccess", true);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    public Map<String, Object> selectExeGoalCnt(PushupVo inVo){
 
-		List<Map<String,Object>> list = null;
-		try{
-			list = pushupDao.selectPushupList(params);;
-			result.put("isSuccess", true);
-			result.put("data", list);
-		} catch (Exception e){
-			result.put("isSuccess", false);
-			result.put("errUserMsg", "시스템 장애가 발생하였습니다");
-			result.put("errSysrMsg", e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
+        Map<String, Object> result = new HashMap<String, Object>();
 
-	public Map<String, Object> savePushup(Map<String,String> params){
+        try {
+            List<PushupVo> pushupVoList = null;
+            pushupVoList = pushupDao.selectExeGoalCnt(inVo);
+            result.put("isSuccess", true);
+            result.put("pushupVoList", pushupVoList);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+    	
+    public Map<String, Object> selectExeGoalCntHis(PushupVo inVo){
 
+        Map<String, Object> result = new HashMap<String, Object>();
 
-		System.out.println(pushupDao.selectPushupCnt(params));
+        try {
+            List<PushupVo> pushupVoList = null;
+            pushupVoList = pushupDao.selectExeGoalCntHis(inVo);
+            result.put("isSuccess", true);
+            result.put("pushupVoList", pushupVoList);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+        
+    public Map<String, Object> selectExeInfo(PushupVo inVo){
 
-		Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
 
-		Map<String, String> errors = new HashMap<String, String>();
-		errors = pushupValidatorSrv.validateSavePushup(params);
+        try {
+            List<PushupVo> pushupVoList = null;
+            pushupVoList = pushupDao.selectExeInfo(inVo);
+            result.put("isSuccess", true);
+            result.put("pushupVoList", pushupVoList);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 
-		if(errors.size()>0){
-			result.put("isSuccess", false);
-			result.put("errUserMsg", errors.get("errUserMsg"));
-			return result;
-		} else {
-			try{
-		    	result.put("isSuccess", true);
+    public Map<String, Object> selectExeHis(PushupVo inVo){
 
-			    if  (pushupDao.selectPushupCnt(params)==0) {
-			    	pushupDao.insertPushup(params);
-			    	result.put("msg", "입력 되었습니다");
-			    } else {
-			    	pushupDao.updatePushup(params);
-			    	result.put("msg", "갱신 되었습니다");
-			    }
-			} catch (Exception e){
-				e.printStackTrace();
-				result.put("errUserMsg", "시스템 장애가 발생되었습니다.");
-			}
-			return result;
-		}
-	}
+        Map<String, Object> result = new HashMap<String, Object>();
 
-	public Map<String, Object> deletePushup(Map<String,String> params){
-
-		Map<String, Object> result = new HashMap<String, Object>();
-
-		Map<String, String> errors = new HashMap<String, String>();
-		errors = pushupValidatorSrv.validateDeletePushup(params);
-		if(errors.size()>0){
-			//model.addAttribute("tbPushup", tbPushup);
-			result.put("isSuccess", false);
-			result.put("errUserMsg", errors.get("errUserMsg"));
-			System.out.println(result);
-			return result;
-		} else {
-			pushupDao.deletePushup(params);
-			result.put("isSuccess", true);
-			result.put("msg", "삭제 되었습니다");
-			return result;
-		}
-	}
+        try {
+            List<PushupVo> pushupVoList = null;
+            pushupVoList = pushupDao.selectExeHis(inVo);
+            result.put("isSuccess", true);
+            result.put("pushupVoList", pushupVoList);
+        } catch (Exception e){
+            result.put("isSuccess", false);
+            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
+            result.put("errSysMsg", e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 	
 }
