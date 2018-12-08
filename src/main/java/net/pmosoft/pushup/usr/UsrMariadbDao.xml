@@ -34,7 +34,6 @@
     )
 </insert>
 
-
 <select id="selectUsr" parameterType="String" resultType="net.pmosoft.pushup.usr.Usr">
     -- UsrDao.selectUsr
     SELECT   

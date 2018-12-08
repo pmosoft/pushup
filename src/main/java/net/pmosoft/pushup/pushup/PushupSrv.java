@@ -86,7 +86,7 @@ public class PushupSrv {
     public Map<String, Object> selectExerHis(PushupVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
-
+        System.out.println(inVo);
         try {
             List<PushupVo> pushupOutVoList = null;
             pushupOutVoList = pushupDao.selectExerHis(inVo);

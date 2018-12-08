@@ -58,8 +58,6 @@
     )
 </insert>
 
-<!--                              SELECT                                  -->
-
 <select id="selectExerHis" parameterType="net.pmosoft.pushup.pushup.PushupVo" resultType="net.pmosoft.pushup.pushup.PushupVo">
     -- PushupDao.selectExerHis : 운동목표횟수, 금일누적운동횟수, 최근 운동횟수이력
     WITH TEMP01 AS (

@@ -45,8 +45,11 @@ CREATE TABLE PUSH.TPUSH00020 (
 ------------------------------
 -- 유저
 ------------------------------
+SELECT * FROM PUSH.TSYUR00010
+
 
 ﻿DROP TABLE PUSH.TSYUR00010;
+
 
 CREATE TABLE PUSH.TSYUR00010 (
  USR_EMAIL    VARCHAR(40)    NOT NULL comment '사용자이메일'    

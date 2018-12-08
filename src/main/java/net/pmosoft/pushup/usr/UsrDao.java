@@ -1,5 +1,4 @@
 package net.pmosoft.pushup.usr;
-
 import java.util.List;
 import java.util.Map;
 
