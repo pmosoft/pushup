@@ -18,11 +18,19 @@ public class PushupSrv {
 
 	@Autowired
 	private PushupValidatorSrv pushupValidatorSrv;
-
-    public Map<String, Object> insertExeHis(PushupVo inVo){
+ 
+	/* *************************************************************
+	 *                            SAVE
+	 * *************************************************************/
+    public Map<String, Object> saveExerHis(PushupVo inVo){
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            pushupDao.insertExeHis(inVo);
+            PushupVo pushupVo = null;
+            pushupVo = pushupDao.selectSaveExerCntYn(inVo);
+            if(pushupVo.getSaveExerCntYn().contains("Y")){
+                pushupDao.insertExerHis(inVo);
+            } else {
+            }
             result.put("isSuccess", true);
         } catch (Exception e){
             result.put("isSuccess", false);
@@ -33,10 +41,16 @@ public class PushupSrv {
         return result;
     }
 
-    public Map<String, Object> insertExeGoalCntHis(PushupVo inVo){
+    public Map<String, Object> saveExerGoalCntHis(PushupVo inVo){
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            pushupDao.insertExeGoalCntHis(inVo);
+            PushupVo pushupVo = null;
+            pushupVo = pushupDao.selectExerGoalTodayYn(inVo);
+            if(pushupVo.getExerGoalTodayYn().contains("N")){
+                pushupDao.insertExerGoalCntHis(inVo);
+            } else {
+                pushupDao.updateExerGoalCntHis(inVo);
+            }
             result.put("isSuccess", true);
         } catch (Exception e){
             result.put("isSuccess", false);
@@ -45,35 +59,21 @@ public class PushupSrv {
             e.printStackTrace();
         }
         return result;
-    }
+     }
     
-    public Map<String, Object> selectExeGoalCnt(PushupVo inVo){
+    /* *************************************************************
+     *                            SELECT
+     * *************************************************************/
+	
+    public Map<String, Object> selectExerGoalCntHis(PushupVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<PushupVo> pushupVoList = null;
-            pushupVoList = pushupDao.selectExeGoalCnt(inVo);
+            List<PushupVo> pushupOutVoList = null;
+            pushupOutVoList = pushupDao.selectExerGoalCntHis(inVo);
             result.put("isSuccess", true);
-            result.put("pushupVoList", pushupVoList);
-        } catch (Exception e){
-            result.put("isSuccess", false);
-            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
-            result.put("errSysMsg", e.getMessage());
-            e.printStackTrace();
-        }
-        return result;
-    }
-    	
-    public Map<String, Object> selectExeGoalCntHis(PushupVo inVo){
-
-        Map<String, Object> result = new HashMap<String, Object>();
-
-        try {
-            List<PushupVo> pushupVoList = null;
-            pushupVoList = pushupDao.selectExeGoalCntHis(inVo);
-            result.put("isSuccess", true);
-            result.put("pushupVoList", pushupVoList);
+            result.put("pushupOutVoList", pushupOutVoList);
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
@@ -83,33 +83,15 @@ public class PushupSrv {
         return result;
     }
         
-    public Map<String, Object> selectExeInfo(PushupVo inVo){
+    public Map<String, Object> selectExerHis(PushupVo inVo){
 
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            List<PushupVo> pushupVoList = null;
-            pushupVoList = pushupDao.selectExeInfo(inVo);
+            List<PushupVo> pushupOutVoList = null;
+            pushupOutVoList = pushupDao.selectExerHis(inVo);
             result.put("isSuccess", true);
-            result.put("pushupVoList", pushupVoList);
-        } catch (Exception e){
-            result.put("isSuccess", false);
-            result.put("errUsrMsg", "시스템 장애가 발생하였습니다");
-            result.put("errSysMsg", e.getMessage());
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public Map<String, Object> selectExeHis(PushupVo inVo){
-
-        Map<String, Object> result = new HashMap<String, Object>();
-
-        try {
-            List<PushupVo> pushupVoList = null;
-            pushupVoList = pushupDao.selectExeHis(inVo);
-            result.put("isSuccess", true);
-            result.put("pushupVoList", pushupVoList);
+            result.put("pushupOutVoList", pushupOutVoList);
         } catch (Exception e){
             result.put("isSuccess", false);
             result.put("errUsrMsg", "시스템 장애가 발생하였습니다");

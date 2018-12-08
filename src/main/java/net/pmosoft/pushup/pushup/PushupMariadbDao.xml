@@ -3,65 +3,143 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.pmosoft.pushup.main.PushupDao">
+<mapper namespace="net.pmosoft.pushup.pushup.PushupDao">
 
-<select id="selectPushupList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+<!--                              INSERT                                   -->
+<insert id="insertExerHis" parameterType="net.pmosoft.pushup.pushup.PushupVo">
 
-	-- PushupDao.selectPushupList
-    SELECT '제목1' AS TITLE ,'내용1' AS CONTENT ,'' AS REG_DTM ,'ADMIN' AS REG_USR_ID ,'' AS UPD_DTM ,'' AS UPD_USR_ID UNION ALL            
-    SELECT '제목2' AS TITLE ,'내용2' AS CONTENT ,'' AS REG_DTM ,'ADMIN' AS REG_USR_ID ,'' AS UPD_DTM ,'' AS UPD_USR_ID UNION ALL
-    SELECT '제목3' AS TITLE ,'내용3' AS CONTENT ,'' AS REG_DTM ,'ADMIN' AS REG_USR_ID ,'' AS UPD_DTM ,'' AS UPD_USR_ID UNION ALL
-    SELECT '제목4' AS TITLE ,'내용4' AS CONTENT ,'' AS REG_DTM ,'ADMIN' AS REG_USR_ID ,'' AS UPD_DTM ,'' AS UPD_USR_ID    
-			
-</select>
-
-<select id="selectPushupCnt" parameterType="java.util.HashMap" resultType="int">
-	-- PushupDao.selectPushupCnt
-	SELECT COUNT(*) CNT
-	FROM   DUAL
-</select>
-
-<insert id="insertPushup" parameterType="java.util.HashMap">
-
-	-- PushupDao.insertPushup
-	INSERT INTO TDACM00010
-	(
-	     PKG_FUL_NM
-		,PKG2_NM
-		,REG_DTM
-		,REG_USR_ID
-		,UPD_DTM
-		,UPD_USR_ID
-	) VALUES (
-         #{PKG_FUL_NM}
-		,#{PKG2_NM}
-		,curdate()
-		,#{REG_USR_ID}
-		,curdate()
-		,#{UPD_USR_ID}
-	)
-
+    -- PushupDao.insertUsrSttlMstr
+    INSERT INTO PUSH.TPUSH00010 -- 운동실시이력
+    (
+		 USR_ID          -- 유저아이디
+		,EXER_DTM        -- 운동일시 
+		,EXER_CD         -- 운동코드 
+		,EXER_DT         -- 운동일자 
+		,EXER_CNT        -- 운동횟수 
+		,REG_DTM         -- 등록일시   
+		,REG_USR_ID      -- 등록자    
+		,UPD_DTM         -- 변경일시   
+		,UPD_USR_ID      -- 변경자    
+    ) VALUES (
+         #{usrId}        -- 유저아이디    
+        ,DATE_FORMAT(NOW(),'%Y%m%d%H%i%S')      -- 운동일시
+        ,#{exerCd}       -- 운동코드   
+        ,DATE_FORMAT(NOW(),'%Y%m%d')       -- 운동일자  
+        ,#{exerCnt}      -- 운동횟수  
+        ,now()           -- 등록일시  
+        ,#{regUsrId}     -- 등록자   
+        ,now()           -- 변경일시  
+        ,#{updUsrId}     -- 변경자   
+    )
 </insert>
 
-<delete id="deletePushup" parameterType="java.util.HashMap">
-	-- PushupDao.deletePushup
-	DELETE FROM TDACM00040 WHERE COL_STS_CD = #{COL_STS_CD}
-</delete>
+<insert id="insertExerGoalCntHis" parameterType="net.pmosoft.pushup.pushup.PushupVo">
 
-<update id="updatePushup" parameterType="java.util.HashMap">
+    -- PushupDao.insertUsrSttlMstr
+    INSERT INTO PUSH.TPUSH00020 -- 운동목표이력
+    (
+         USR_ID          -- 유저아이디    
+        ,EXER_CD         -- 운동코드
+        ,START_DT        -- 시작일자   
+        ,EXER_GOAL_CNT   -- 운동목표횟수 
+        ,REG_DTM         -- 등록일시   
+        ,REG_USR_ID      -- 등록자    
+        ,UPD_DTM         -- 변경일시   
+        ,UPD_USR_ID      -- 변경자    
+    ) VALUES (
+         #{usrId}                    -- 유저아이디    
+        ,#{exerCd}                   -- 운동코드
+        ,DATE_FORMAT(NOW(),'%Y%m%d') -- 시작일자   
+        ,#{exerGoalCnt}              -- 운동목표횟수 
+        ,now()                       -- 등록일시
+        ,#{regUsrId}                 -- 등록자
+        ,now()                       -- 변경일시
+        ,#{updUsrId}                 -- 변경자
+    )
+</insert>
 
-	-- PushupDao.updatePushup
-	UPDATE TDACM00010
-	SET  PKG2_NM      = #{PKG2_NM}
-		,PKG3_NM      = #{PKG3_NM}
-		,PKG4_NM      = #{PKG4_NM}
-		,PKG_HNM      = #{PKG_HNM}
-		,PKG_DESC     = #{PKG_DESC}
-		,USE_YN       = CASE WHEN #{USE_YN} = 'true' THEN 'Y' ELSE 'N' END
-		,UPD_DTM      = curdate()
-		,UPD_USR_ID  = #{UPD_USR_ID}
-	WHERE  PKG_FUL_NM = #{PKG_FUL_NM}
+<!--                              SELECT                                  -->
 
-</update>
+<select id="selectExerHis" parameterType="net.pmosoft.pushup.pushup.PushupVo" resultType="net.pmosoft.pushup.pushup.PushupVo">
+    -- PushupDao.selectExerHis : 운동목표횟수, 금일누적운동횟수, 최근 운동횟수이력
+    WITH TEMP01 AS (
+	    SELECT A.EXER_GOAL_CNT -- 운동목표횟수    
+	    FROM   PUSH.TPUSH00020 A
+	    WHERE  A.USR_ID   = #{usrId}
+	    AND    A.START_DT = (SELECT MAX(START_DT) FROM PUSH.TPUSH00020 WHERE USR_ID = #{usrId} AND EXER_CD = #{exerCd})
+	    AND    A.EXER_CD  = #{exerCd}
+    ), TEMP02 AS (
+        SELECT SUM(A.EXER_CNT) AS TODAY_EXER_CNT -- 금일누적운동횟수    
+        FROM   PUSH.TPUSH00010 A
+        WHERE  A.USR_ID   = #{usrId}
+        AND    A.EXER_DT  = (SELECT MAX(EXER_DT) FROM PUSH.TPUSH00010 WHERE USR_ID = #{usrId} AND EXER_CD = #{exerCd})
+        AND    A.EXER_CD  = #{exerCd}
+    )    
+    SELECT
+           A.USR_ID          -- 유저아이디
+         , A.EXER_DTM        -- 운동일시 
+         , A.EXER_CD         -- 운동코드 
+         , DATE_FORMAT(A.EXER_DT,'%Y-%m-%d') AS EXER_DT -- 운동일자
+         , A.EXER_CNT        -- 운동횟수 
+         , A.REG_DTM         -- 등록일시   
+         , A.REG_USR_ID      -- 등록자    
+         , A.UPD_DTM         -- 변경일시   
+         , A.UPD_USR_ID      -- 변경자
+         , DATE_FORMAT(A.EXER_DTM,'%H:%i:%S') AS EXER_TM -- 운동시간
+         , B.EXER_GOAL_CNT   -- 운동목표횟수 
+         , C.TODAY_EXER_CNT  -- 금일누적운동횟수 
+    FROM   PUSH.TPUSH00010 A,
+           TEMP01 B,
+           TEMP02 C
+    WHERE  A.USR_ID   = #{usrId}
+    AND    A.EXER_CD  = #{exerCd}
+    ORDER BY A.EXER_DTM DESC
+</select>
+
+<select id="selectSaveExerCntYn" parameterType="net.pmosoft.pushup.pushup.PushupVo" resultType="net.pmosoft.pushup.pushup.PushupVo">
+    -- PushupDao.selectSaveExerCntYn : 현재 운동횟수 저장가능 여부
+    SELECT IFNULL(MAX('Y'),'Y') AS SAVE_EXER_CNT_YN
+    FROM   PUSH.TPUSH00010 A
+    WHERE  A.USR_ID  = #{usrId}
+    AND    A.EXER_CD = #{exerCd}
+</select>
+
+<select id="selectExerGoalCntHis" parameterType="net.pmosoft.pushup.pushup.PushupVo" resultType="net.pmosoft.pushup.pushup.PushupVo">
+    -- PushupDao.selectExerGoalCntHis : 최근 운동목표횟수이력
+    SELECT
+           USR_ID          -- 유저아이디    
+         , EXER_CD         -- 운동코드
+         , DATE_FORMAT(START_DT,'%Y-%m-%d') AS START_DT -- 시작일자
+         , EXER_GOAL_CNT   -- 운동목표횟수 
+         , REG_DTM         -- 등록일시   
+         , REG_USR_ID      -- 등록자    
+         , UPD_DTM         -- 변경일시   
+         , UPD_USR_ID      -- 변경자    
+    FROM   PUSH.TPUSH00020 A
+    WHERE  A.USR_ID   = #{usrId}
+    AND    A.EXER_CD  = #{exerCd}
+    ORDER BY START_DT DESC
+</select>
+
+<select id="selectExerGoalTodayYn" parameterType="net.pmosoft.pushup.pushup.PushupVo" resultType="net.pmosoft.pushup.pushup.PushupVo">
+    -- PushupDao.selectExerGoalTodayYn : 운동목표금일등록여부
+    SELECT MAX(START_DT) AS START_DT
+         , CASE WHEN MAX(START_DT) = DATE_FORMAT(NOW(),'%Y%m%d') 
+                THEN 'Y' ELSE 'N' 
+           END           AS EXER_GOAL_TODAY_YN    
+    FROM   PUSH.TPUSH00020 A
+    WHERE  A.USR_ID  = #{usrId}
+    AND    A.EXER_CD = #{exerCd}
+</select>
+
+<!--                              UPDATE                                  -->
+<update id="updateExerGoalCntHis" parameterType="net.pmosoft.pushup.pushup.PushupVo">
+    -- PushupDao.updateExerGoalCntHis : 금일 운동목표 갱신
+    UPDATE PUSH.TPUSH00020 
+    SET    EXER_GOAL_CNT = #{exerGoalCnt}
+    WHERE  USR_ID   = #{usrId} 
+    AND    EXER_CD  = #{exerCd}
+    AND    START_DT = DATE_FORMAT(NOW(),'%Y%m%d')
+</update> 
 
 </mapper>

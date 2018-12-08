@@ -8,13 +8,17 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PushupDao {
 
-	void insertExeHis(PushupVo inVo);
-    void insertExeGoalCntHis(PushupVo inVo);
-    List<PushupVo> selectExeGoalCnt(PushupVo inVo);
-    List<PushupVo> selectExeGoalCntHis(PushupVo inVo);
-    List<PushupVo> selectExeInfo(PushupVo inVo);
-    List<PushupVo> selectExeHis(PushupVo inVo);
-	
+	void insertExerHis(PushupVo inVo);
+    void insertExerGoalCntHis(PushupVo inVo);
+
+    List<PushupVo> selectExerHis(PushupVo inVo);
+    PushupVo selectSaveExerCntYn(PushupVo inVo);
+    
+    List<PushupVo> selectExerGoalCntHis(PushupVo inVo);
+    PushupVo selectExerGoalTodayYn(PushupVo inVo);
+    
+    void updateExerGoalCntHis(PushupVo inVo);
+
 }
 
 
