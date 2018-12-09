@@ -93,7 +93,9 @@ var NotFoundComponent = /** @class */ (function () {
         this.router = router;
     }
     NotFoundComponent.prototype.ngOnInit = function () {
+        console.log("not found111");
         this.router.navigate(['/pushup-regist']);
+        console.log("not found222");
     };
     NotFoundComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

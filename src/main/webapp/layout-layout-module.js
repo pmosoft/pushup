@@ -8109,7 +8109,7 @@ var LayoutComponent = /** @class */ (function () {
         this.usrId = localStorage.getItem('usrId');
     }
     LayoutComponent.prototype.ngOnInit = function () {
-        //this.router.navigate(['/pushup-view/:blank']);
+        this.router.navigate(['/pushup-regist']);
         // this.pushupInVo.usrId = this.usrId;
         // this.pushupService.selectUsrSttlMstrList(this.pushupInVo)
         // .subscribe(result => {
