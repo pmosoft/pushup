@@ -8,4 +8,5 @@ net\pmosoft\pushup\usr\UsrDao.class
 net\pmosoft\pushup\PushupApplication.class
 net\pmosoft\pushup\pushup\PushupDao.class
 net\pmosoft\pushup\usr\Usr.class
+net\pmosoft\pushup\PushupApplication$WebApplicationConfig.class
 net\pmosoft\pushup\usr\UsrValidatorSrv.class

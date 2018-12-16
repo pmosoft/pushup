@@ -1,8 +1,5 @@
-        SELECT A.EXER_GOAL_CNT -- 운동목표횟수    
-        FROM   PUSH.TPUSH00020 A
+        SELECT SUM(A.EXER_CNT) AS TODAY_EXER_CNT -- 금일누적운동횟수    
+        FROM   PUSH.TPUSH00010 A
         WHERE  A.USR_ID   = 'lifedomy@gmail.com'
-        AND    A.START_DT = (SELECT MAX(START_DT) FROM PUSH.TPUSH00020 WHERE USR_ID = 'lifedomy@gmail.com' AND EXER_CD = '01')
+        AND    A.EXER_DT  = DATE_FORMAT(NOW(),'%Y%m%d')
         AND    A.EXER_CD  = '01'
-        
-        SELECT * FROM   PUSH.TPUSH00020 A
-        
